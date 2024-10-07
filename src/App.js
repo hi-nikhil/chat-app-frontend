@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+// import logo from "./logo.svg";
+// import "./App.css";
+// import Chat from "./Chat";
 
-function App() {
+// function App() {
+//   return (
+//     <div className="App">
+//       <Chat />
+//     </div>
+//   );
+// }
+
+// export default App;
+
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import Login from "./Auth/Login";
+import Signup from "./Auth/Signup";
+import ChatComponent from "./ChatComponet";
+
+const App = () => {
+  // Add user authentication logic here
+  let isAuthenticated = false; // Change this based on authentication
+  const token = localStorage.getItem("token");
+  if (token) isAuthenticated = true;
+  console.log(">>>>..is >>", isAuthenticated);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* Protected Route */}
+        <Route path="/chat" element={isAuthenticated ? <ChatComponent /> : <Navigate to="/login" />} />
+
+        {/* Redirect to Login by default */}
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
